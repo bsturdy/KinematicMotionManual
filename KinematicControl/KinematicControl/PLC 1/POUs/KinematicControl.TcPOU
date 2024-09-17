@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="KinematicControl" Id="{de91caef-386b-43ef-9c44-406dad6ca978}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK KinematicControl
+VAR
+	
+	_Master				: MasterAxisControl;
+	_Slave				: ARRAY [1.._NumOfSlaves] OF SlaveAxisControl;
+	
+	_LocalState			: BYTE;
+	_i					: BYTE;
+	
+END_VAR
+VAR CONSTANT
+	
+	_NumOfSlaves		: BYTE := 3;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CyclicUpdate" Id="{a1c7abaa-811c-40fd-8aa1-380b619fe4b2}">
+      <Declaration><![CDATA[METHOD CyclicUpdate : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+// Update all axes
+_Master.CyclicUpdate();
+FOR _i := 1 TO _NumOfSlaves BY 1 DO
+	_Slave[_i].CyclicUpdate();
+END_FOR
+
+_Slave[1].PreviousAnglePosition 	:= _Master.AnglePosition;
+_Slave[1].PreviousLengthOfShaft 	:= _Master.LengthOfShaft;
+_Slave[1].PreviousWidthOfShaft		:= _Master.WidthOfShaft;
+_Slave[1].PreviousXCoordGlobal		:= _Master.XCoord;
+_Slave[1].PreviousYCoordGlobal		:= _Master.YCoord;
+
+IF _NumOfSlaves > 1 THEN
+	FOR _i := 2 TO _NumOfSlaves BY 1 DO
+		_Slave[_i].PreviousAnglePosition	:= _Slave[_i - 1].AnglePosition;
+		_Slave[_i].PreviousLengthOfShaft 	:= _Slave[_i - 1].LengthOfShaft;
+		_Slave[_i].PreviousWidthOfShaft		:= _Slave[_i - 1].WidthOfShaft;
+		_Slave[_i].PreviousXCoordGlobal		:= _Slave[_i - 1].XCoord;
+		_Slave[_i].PreviousYCoordGlobal		:= _Slave[_i - 1].YCoord;
+	END_FOR	
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="KinematicControl">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="KinematicControl.CyclicUpdate">
+      <LineId Id="13" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="2" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="28" Count="1" />
+      <LineId Id="31" Count="2" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="26" Count="1" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="19" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

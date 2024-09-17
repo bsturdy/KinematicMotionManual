@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "AxisAndShaft": {
+      "frameworkControlNamespace": "TcHmi.Controls.Beckhoff",
+      "frameworkControlType": "TcHmi.Controls.System.TcHmiUserControl",
+      "frameworkInstanceOf": "TcHmi.Controls.System.TcHmiControl",
+      "frameworkUserControlConfig": "Pages\\_UserContent\\AxisAndShaft.usercontrol.json",
+      "type": "object",
+      "id": "tchmi:project#/definitions/AxisAndShaft"
+    }
+  }
+}

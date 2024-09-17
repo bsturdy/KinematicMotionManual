@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="SlaveAxisControl" Id="{d8ebd79d-dd1b-4835-8aa9-d1e613ab2927}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SlaveAxisControl EXTENDS MasterAxisControl
+VAR
+	
+	_PreviousAnglePosition		: LREAL;
+	_PreviousLengthOfShaft		: LREAL;
+	_PreviousWidthOfShaft		: LREAL;
+	
+	_xCoordPreviousRelative		: LREAL;
+	_yCoordPreviousRelative		: LREAL;
+	_xCoordPreviousGlobal		: LREAL;
+	_yCoordPreviousGlobal		: LREAL;
+	_xCoordGlobal				: LREAL;
+	_yCoordGlobal				: LREAL;
+	
+	_SlaveOrderInChain			: LREAL;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Methods" Id="{ba7939f0-e91b-4c7d-8597-9e28735743c9}" />
+    <Folder Name="Properties" Id="{145bc9ea-6d77-45cc-bdf2-55c818cf66d3}" />
+    <Method Name="CyclicUpdate" Id="{5135d1cb-d140-44b0-8571-d9917921e246}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD CyclicUpdate : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_Enable(Axis := _Axis);
+_Reset(Axis := _Axis);
+_ReadStatus(Axis := _Axis);
+_MovePosAbs(Axis := _Axis);
+_MovePosRel(Axis := _Axis);
+
+_xCoordRelative := _PreviousLengthOfShaft * COS(_PreviousAnglePosition * Pi / 180);
+_yCoordRelative := _PreviousLengthOfShaft * SIN(_PreviousAnglePosition * Pi / 180);
+
+_xCoordGlobal := _xCoordRelative + _xCoordPreviousGlobal;
+_yCoordGlobal := _yCoordRelative + _yCoordPreviousGlobal;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="PreviousAnglePosition" Id="{401de715-c68e-4c73-86c3-2ee5f70cc188}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PreviousAnglePosition : LREAL]]></Declaration>
+      <Get Name="Get" Id="{c24e600a-2903-48d6-b9fa-3eb40073854d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PreviousAnglePosition := _PreviousAnglePosition;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e69371f3-c7ba-4224-9e4f-7efc6379c7be}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_PreviousAnglePosition := PreviousAnglePosition;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PreviousLengthOfShaft" Id="{90993024-e3a5-40ea-a1bc-1dfa7608b3d9}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PreviousLengthOfShaft : LREAL]]></Declaration>
+      <Get Name="Get" Id="{a6ba4a2a-324e-4046-bbc4-71da89db077c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PreviousLengthOfShaft := _PreviousLengthOfShaft;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{9257e878-1579-4f29-a04d-335e42f8fdb0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_PreviousLengthOfShaft := PreviousLengthOfShaft;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PreviousWidthOfShaft" Id="{ed2c23fe-ac27-4767-a87c-98869ff059d0}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PreviousWidthOfShaft : LREAL]]></Declaration>
+      <Get Name="Get" Id="{0def12c1-0069-425d-a777-544b4142b55a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PreviousWidthOfShaft := _PreviousWidthOfShaft;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{418a476b-a7db-49ae-ae56-37498f7e28d4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_PreviousWidthOfShaft := PreviousWidthOfShaft;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PreviousXCoordGlobal" Id="{f382988b-a5c1-49a5-81c7-c8dd14a92cd5}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PreviousXCoordGlobal : LREAL]]></Declaration>
+      <Get Name="Get" Id="{f84f85ab-88e4-4e21-b24b-adb6624a1c56}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PreviousXCoordGlobal := _xCoordPreviousGlobal;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{0ef05fb8-dc4b-408c-86c5-4e4b91e6bc2a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_xCoordPreviousGlobal := PreviousXCoordGlobal;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PreviousXCoordRelative" Id="{798c4aab-b7ef-457d-b724-f088d05a6dea}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PreviousXCoordRelative : LREAL]]></Declaration>
+      <Get Name="Get" Id="{8d544cf3-aa74-48b7-9c12-82db2ee9f523}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PreviousXCoordRelative := _xCoordPreviousRelative;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{9d2e4602-1e87-42c2-9758-6b15640e0787}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_xCoordPreviousRelative := PreviousXCoordRelative;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PreviousYCoordGlobal" Id="{f30b318e-ad9b-4c68-8188-060d6aeb9081}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PreviousYCoordGlobal : LREAL]]></Declaration>
+      <Get Name="Get" Id="{09fc61f0-4634-4d40-8cc7-a259b3f7006d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PreviousYCoordGlobal := _yCoordPreviousGlobal;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e4ae6b0f-f3ae-4bf0-b5da-e73e86797cc8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_yCoordPreviousGlobal := PreviousYCoordGlobal;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PreviousYCoordRelative" Id="{9f434607-08dc-4a17-b8ed-4e6ff10b48d0}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PreviousYCoordRelative : LREAL]]></Declaration>
+      <Get Name="Get" Id="{bd34922a-db25-448f-9239-379c3b6ee94a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PreviousYCoordRelative := _yCoordPreviousRelative;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{70254f2d-eb8f-4db5-9042-c2129c509e6d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_yCoordPreviousRelative := PreviousYCoordRelative;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SlaveOrderInChain" Id="{d6fbf4e6-d766-4c80-b8a7-77b1098a9634}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY SlaveOrderInChain : LREAL]]></Declaration>
+      <Get Name="Get" Id="{7379b388-49c4-4c50-aa05-8d7ed695ed24}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SlaveOrderInChain := _SlaveOrderInChain;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{eb16264c-02bc-406d-aaaa-9a3ad8cc66ba}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF SlaveOrderInChain < 1 THEN
+	_SlaveOrderInChain := 1;
+ELSE
+	_SlaveOrderInChain := SlaveOrderInChain;
+END_IF]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="SlaveAxisControl">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.CyclicUpdate">
+      <LineId Id="8" Count="4" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousAnglePosition.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousAnglePosition.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousLengthOfShaft.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousLengthOfShaft.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousWidthOfShaft.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousWidthOfShaft.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousXCoordGlobal.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousXCoordGlobal.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousXCoordRelative.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousXCoordRelative.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousYCoordGlobal.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousYCoordGlobal.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousYCoordRelative.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.PreviousYCoordRelative.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.SlaveOrderInChain.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.SlaveOrderInChain.Set">
+      <LineId Id="2" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="6" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

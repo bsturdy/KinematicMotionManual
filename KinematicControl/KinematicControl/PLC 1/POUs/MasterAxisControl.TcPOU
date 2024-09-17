@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MasterAxisControl" Id="{06b8ec07-9351-4356-ad83-8beda64e605b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MasterAxisControl
+VAR
+	
+	_Axis			: AXIS_REF;
+	
+	_AnglePosition	: LREAL;
+	_LengthOfShaft	: LREAL;
+	_WidthOfShaft	: LREAL;
+	_AxisSize		: LREAL;
+	_xCoordRelative	: LREAL;
+	_yCoordRelative	: LREAL;
+	_LocalState		: BYTE;
+	
+	_Enable			: MC_Power;
+	_Reset			: MC_Reset;
+	_MovePosAbs		: MC_MoveAbsolute;
+	_MovePosRel		: MC_MoveRelative;	
+	_ReadStatus		: MC_ReadStatus;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="Methods" Id="{55240223-bfe6-490d-877c-cceb4cbe873d}" />
+    <Folder Name="Properties" Id="{54f81e1e-9b88-4e2c-b721-85ee2157fbaf}" />
+    <Property Name="AnglePosition" Id="{a0efd3fa-6851-4f6d-bf5d-ab3919601722}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY AnglePosition : LREAL]]></Declaration>
+      <Get Name="Get" Id="{e68dd914-bf5b-44d6-9d43-b2063d778c62}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AnglePosition := _AnglePosition;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{44a868f8-81ed-4547-bd40-1c7403f1f2b1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="AxisSize" Id="{3807e733-1314-49a8-98ee-94befc5ffa34}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY AxisSize : LREAL]]></Declaration>
+      <Get Name="Get" Id="{3dae204a-6b08-4d70-a24a-3b9e0ddada18}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AxisSize := _AxisSize;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{cb73dcfa-174b-4e7c-bf7b-975ed890d0ef}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF AxisSize < 0 THEN
+	_AxisSize := 0;
+ELSE
+	_AxisSize := AxisSize;
+END_IF]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="CyclicUpdate" Id="{93cf9554-dd93-416c-9dfb-b77d81f9a9c7}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD CyclicUpdate : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_Enable(Axis := _Axis);
+_Reset(Axis := _Axis);
+_ReadStatus(Axis := _Axis);
+_MovePosAbs(Axis := _Axis);
+_MovePosRel(Axis := _Axis);
+
+_AnglePosition := _Axis.NcToPlc.ModuloActPos;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="LengthOfShaft" Id="{0663e92e-7f49-4778-beae-8659eca01a4a}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY LengthOfShaft : LREAL]]></Declaration>
+      <Get Name="Get" Id="{282f4c2d-1027-488d-94bd-9577e7af593e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LengthOfShaft := _LengthOfShaft;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{3e643bf1-5234-4881-8fd3-0d7c97321420}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF LengthOfShaft < 0 THEN
+	_LengthOfShaft := 0;
+ELSE
+	_LengthOfShaft := LengthOfShaft;
+END_IF]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="MoveRelative" Id="{ae23b31e-a597-4182-9778-44dab6fd606c}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD MoveRelative : BOOL
+VAR_INPUT
+	Position	: LREAL;
+	Velocity	: LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_MovePosRel(Axis := _Axis);
+_MovePosRel.Distance := Position;
+_MovePosRel.Velocity := Velocity;
+_MovePosRel.Execute := TRUE;
+IF _MovePosRel.Done THEN
+	_MovePosRel.Execute := FALSE;
+	MoveRelative := TRUE;
+ELSIF _MovePosRel.Error THEN
+	_MovePosRel.Execute := FALSE;
+	MoveRelative := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="PowerOn" Id="{4d1e9861-1256-4dab-b7e3-8aa6316c30d3}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD PowerOn : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_Enable(Axis := _Axis);
+_Enable.Enable := TRUE;
+_Enable.Enable_Negative := TRUE;
+_Enable.Enable_Positive := TRUE;
+_Enable.Override := 100;
+IF _Enable.Status THEN
+	PowerOn := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="WidthOfShaft" Id="{d2569453-f152-4749-bf99-e240475f1bac}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY WidthOfShaft : LREAL]]></Declaration>
+      <Get Name="Get" Id="{4ed770ad-bf6e-4ad3-b2aa-cfb6834c3d50}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[WidthOfShaft := _WidthOfShaft;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{f306815e-e89f-4876-a389-c901cd1024e0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF WidthOfShaft < 0 THEN
+	_WidthOfShaft := 0;
+ELSE
+	_WidthOfShaft := WidthOfShaft;
+END_IF]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="XCoord" Id="{ac1e0834-41b4-4929-b6da-4d01ead02cbf}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY XCoord : LREAL]]></Declaration>
+      <Get Name="Get" Id="{920133e8-80c4-4159-92fb-29f3d2eca0a4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[XCoord := _xCoordRelative;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{40786f6d-2db5-4771-b814-271a0de52117}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_xCoordRelative := XCoord;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="YCoord" Id="{2e91a015-1146-47df-af69-1be6e171815a}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY YCoord : LREAL]]></Declaration>
+      <Get Name="Get" Id="{ca0037c2-f169-444d-b7c0-331d0e68b39b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[YCoord := _yCoordRelative;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{800d9934-09e9-4796-b59f-0744426bbbe5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_yCoordRelative := YCoord;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="MasterAxisControl">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.AnglePosition.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.AnglePosition.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.AxisSize.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.AxisSize.Set">
+      <LineId Id="5" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.CyclicUpdate">
+      <LineId Id="8" Count="4" />
+      <LineId Id="6" Count="1" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.LengthOfShaft.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.LengthOfShaft.Set">
+      <LineId Id="2" Count="0" />
+      <LineId Id="7" Count="2" />
+      <LineId Id="6" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.MoveRelative">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="4" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.PowerOn">
+      <LineId Id="5" Count="1" />
+      <LineId Id="8" Count="5" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.WidthOfShaft.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.WidthOfShaft.Set">
+      <LineId Id="2" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="6" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.XCoord.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.XCoord.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.YCoord.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="MasterAxisControl.YCoord.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
