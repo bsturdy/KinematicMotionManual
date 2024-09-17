@@ -36,6 +36,8 @@ _ReadStatus(Axis := _Axis);
 _MovePosAbs(Axis := _Axis);
 _MovePosRel(Axis := _Axis);
 
+_AnglePosition := _Axis.NcToPlc.ModuloActPos;
+
 _xCoordRelative := _PreviousLengthOfShaft * COS(_PreviousAnglePosition * Pi / 180);
 _yCoordRelative := _PreviousLengthOfShaft * SIN(_PreviousAnglePosition * Pi / 180);
 
@@ -199,11 +201,51 @@ END_IF]]></ST>
         </Implementation>
       </Set>
     </Property>
+    <Property Name="XCoordGlobal" Id="{7588ca51-1154-418a-a2f0-b31ed871ff04}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY XCoordGlobal : LREAL]]></Declaration>
+      <Get Name="Get" Id="{afe87cc7-e156-4d7e-ab88-c1fb0a705f2b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[XCoordGlobal := _xCoordGlobal;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{c47d160f-9687-4d05-ad91-dd0a226d41ed}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="YCoordGlobal" Id="{afdac74d-dfdb-4ec8-9d6b-986a5f4682b4}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY YCoordGlobal : LREAL]]></Declaration>
+      <Get Name="Get" Id="{ac5da671-ff58-48ff-8745-f8581d93018e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[YCoordGlobal := _yCoordGlobal;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{c9c6c84f-a2b2-4210-9a2c-00d9e1bc7cff}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <LineIds Name="SlaveAxisControl">
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="SlaveAxisControl.CyclicUpdate">
       <LineId Id="8" Count="4" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="19" Count="0" />
       <LineId Id="6" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="0" />
@@ -261,6 +303,18 @@ END_IF]]></ST>
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="1" />
       <LineId Id="6" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.XCoordGlobal.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.XCoordGlobal.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.YCoordGlobal.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SlaveAxisControl.YCoordGlobal.Set">
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

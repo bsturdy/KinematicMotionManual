@@ -24,8 +24,8 @@ SlaveAxis.CyclicUpdate();
 MasterAxis.LengthOfShaft		 	:= Length;
 MasterAxis.WidthOfShaft 			:= Width;
 MasterAxis.AxisSize 				:= Size;
-MasterAxis.XCoord 					:= xStart;
-MasterAxis.YCoord 					:= yStart;
+MasterAxis.XCoordRelative 			:= xStart;
+MasterAxis.YCoordRelative 			:= yStart;
 
 SlaveAxis.LengthOfShaft 			:= 150;
 SlaveAxis.WidthOfShaft 				:= 60;
@@ -33,10 +33,10 @@ SlaveAxis.PreviousWidthOfShaft 		:= MasterAxis.WidthOfShaft;
 SlaveAxis.PreviousAnglePosition 	:= MasterAxis.AnglePosition;
 SlaveAxis.PreviousLengthOfShaft 	:= MasterAxis.LengthOfShaft;
 
-SlaveAxis.PreviousXCoordGlobal 		:= MasterAxis.XCoord;
-SlaveAxis.PreviousYCoordGlobal 		:= MasterAxis.YCoord;
-SlaveAxis.PreviousXCoordRelative	:= MasterAxis.XCoord;
-SlaveAxis.PreviousYCoordRelative	:= MasterAxis.YCoord;
+SlaveAxis.PreviousXCoordGlobal 		:= MasterAxis.XCoordRelative;
+SlaveAxis.PreviousYCoordGlobal 		:= MasterAxis.YCoordRelative;
+SlaveAxis.PreviousXCoordRelative	:= MasterAxis.XCoordRelative;
+SlaveAxis.PreviousYCoordRelative	:= MasterAxis.YCoordRelative;
 
 CASE State OF
 	
@@ -53,7 +53,7 @@ END_CASE
 
 
 
-Kinematic.CyclicUpdate();
+Kinematic.CyclicUpdate(xCoordMaster := 500, yCoordMaster := 500);
 
 
 

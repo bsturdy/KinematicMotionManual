@@ -167,14 +167,14 @@ END_IF]]></ST>
         </Implementation>
       </Set>
     </Property>
-    <Property Name="XCoord" Id="{ac1e0834-41b4-4929-b6da-4d01ead02cbf}" FolderPath="Properties\">
-      <Declaration><![CDATA[PROPERTY XCoord : LREAL]]></Declaration>
+    <Property Name="XCoordRelative" Id="{ac1e0834-41b4-4929-b6da-4d01ead02cbf}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY XCoordRelative : LREAL]]></Declaration>
       <Get Name="Get" Id="{920133e8-80c4-4159-92fb-29f3d2eca0a4}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[XCoord := _xCoordRelative;]]></ST>
+          <ST><![CDATA[XCoordRelative := _xCoordRelative;]]></ST>
         </Implementation>
       </Get>
       <Set Name="Set" Id="{40786f6d-2db5-4771-b814-271a0de52117}">
@@ -182,18 +182,18 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[_xCoordRelative := XCoord;]]></ST>
+          <ST><![CDATA[_xCoordRelative := XCoordRelative;]]></ST>
         </Implementation>
       </Set>
     </Property>
-    <Property Name="YCoord" Id="{2e91a015-1146-47df-af69-1be6e171815a}" FolderPath="Properties\">
-      <Declaration><![CDATA[PROPERTY YCoord : LREAL]]></Declaration>
+    <Property Name="YCoordRelative" Id="{2e91a015-1146-47df-af69-1be6e171815a}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY YCoordRelative : LREAL]]></Declaration>
       <Get Name="Get" Id="{ca0037c2-f169-444d-b7c0-331d0e68b39b}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[YCoord := _yCoordRelative;]]></ST>
+          <ST><![CDATA[YCoordRelative := _yCoordRelative;]]></ST>
         </Implementation>
       </Get>
       <Set Name="Set" Id="{800d9934-09e9-4796-b59f-0744426bbbe5}">
@@ -201,7 +201,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[_yCoordRelative := YCoord;]]></ST>
+          <ST><![CDATA[_yCoordRelative := YCoordRelative;]]></ST>
         </Implementation>
       </Set>
     </Property>
@@ -256,16 +256,16 @@ END_VAR
       <LineId Id="9" Count="0" />
       <LineId Id="6" Count="0" />
     </LineIds>
-    <LineIds Name="MasterAxisControl.XCoord.Get">
+    <LineIds Name="MasterAxisControl.XCoordRelative.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="MasterAxisControl.XCoord.Set">
+    <LineIds Name="MasterAxisControl.XCoordRelative.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="MasterAxisControl.YCoord.Get">
+    <LineIds Name="MasterAxisControl.YCoordRelative.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="MasterAxisControl.YCoord.Set">
+    <LineIds Name="MasterAxisControl.YCoordRelative.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
